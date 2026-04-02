@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="xpBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a90d9;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1460c8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#003399;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Outer raised border (XP bevel: light top-left, dark bottom-right) -->
+  <rect x="0" y="0" width="32" height="32" fill="#ffffff" />
+  <rect x="1" y="1" width="30" height="30" fill="#c0c0c0" />
+  <rect x="1" y="1" width="29" height="1"  fill="#ffffff" />
+  <rect x="1" y="1" width="1"  height="29" fill="#ffffff" />
+  <rect x="1" y="30" width="30" height="1" fill="#404040" />
+  <rect x="30" y="1" width="1"  height="30" fill="#404040" />
+
+  <!-- Inner fill -->
+  <rect x="2" y="2" width="28" height="28" fill="url(#xpBlue)" />
+
+  <!-- Inner bevel highlight (top-left inner edge) -->
+  <rect x="2" y="2" width="27" height="1"  fill="#7ab4f0" opacity="0.6" />
+  <rect x="2" y="2" width="1"  height="27" fill="#7ab4f0" opacity="0.6" />
+
+  <!-- "NC" text -->
+  <text
+    x="16" y="22"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="14"
+    font-weight="bold"
+    fill="#ffffff"
+    text-anchor="middle"
+    style="paint-order:stroke; stroke:#00227a; stroke-width:1px;"
+  >NC</text>
+</svg>

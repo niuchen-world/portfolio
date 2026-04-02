@@ -1,0 +1,669 @@
+/* ============================================================
+   GLOBAL RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background-color: #008080; /* classic Windows teal desktop */
+  font-family: "Times New Roman", Times, serif;
+  font-size: 16px;
+  color: #000000;
+  padding: 24px 16px 40px;
+  min-height: 100vh;
+}
+
+/* ============================================================
+   WINDOW CHROME (the "Word document" container)
+   ============================================================ */
+.window {
+  max-width: 780px;
+  margin: 0 auto;
+  background: #d4d0c8; /* classic Windows gray */
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #404040;
+  border-bottom: 2px solid #404040;
+  box-shadow: 2px 2px 0 #000000;
+}
+
+/* Title bar */
+.title-bar {
+  background: linear-gradient(to right, #000080, #1084d0);
+  color: #ffffff;
+  font-family: "Arial", "Helvetica", sans-serif;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 3px 6px 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+}
+
+.title-bar-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.title-bar-buttons {
+  margin-left: auto;
+  display: flex;
+  gap: 2px;
+}
+
+.title-bar-btn {
+  width: 16px;
+  height: 14px;
+  background: #d4d0c8;
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #404040;
+  border-bottom: 1px solid #404040;
+  font-family: "Arial", sans-serif;
+  font-size: 9px;
+  font-weight: bold;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+}
+
+/* Menu bar */
+.menu-bar {
+  background: #d4d0c8;
+  font-family: "Arial", "Helvetica", sans-serif;
+  font-size: 12px;
+  padding: 2px 4px;
+  border-bottom: 1px solid #808080;
+  display: flex;
+  gap: 2px;
+}
+
+.menu-item {
+  padding: 2px 8px;
+  cursor: default;
+}
+
+.menu-item:hover {
+  background: #000080;
+  color: #ffffff;
+}
+
+/* ============================================================
+   TAB BAR
+   ============================================================ */
+.tab-bar {
+  display: flex;
+  align-items: flex-end;
+  padding: 6px 8px 0;
+  background: #d4d0c8;
+  gap: 4px;
+  border-bottom: 2px solid #808080;
+}
+
+.tab {
+  font-family: "Arial", "Helvetica", sans-serif;
+  font-size: 12px;
+  padding: 4px 14px 5px;
+  cursor: pointer;
+  background: #d4d0c8;
+  color: #000000;
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #404040;
+  border-bottom: none;
+  position: relative;
+  bottom: -2px;
+  outline: none;
+}
+
+.tab:hover:not(.active) {
+  background: #e8e4dc;
+}
+
+.tab.active {
+  background: #ffffff;
+  font-weight: bold;
+  z-index: 1;
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #404040;
+  border-bottom: 2px solid #ffffff; /* covers the tab-bar border */
+}
+
+/* ============================================================
+   CONTENT AREA (the "white page")
+   ============================================================ */
+.tab-content {
+  background: #ffffff;
+  padding: 32px 40px 40px;
+  border-left: 1px solid #d4d0c8;
+  border-right: 1px solid #d4d0c8;
+  min-height: 520px;
+}
+
+.tab-content.hidden {
+  display: none;
+}
+
+/* ============================================================
+   TYPOGRAPHY (Word-document style)
+   ============================================================ */
+h1 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+h2 {
+  font-family: "Arial", "Helvetica", sans-serif;
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid #000000;
+  padding-bottom: 2px;
+  margin-top: 24px;
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 16px;
+  margin-bottom: 2px;
+}
+
+p {
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+
+ul {
+  padding-left: 22px;
+  margin-bottom: 10px;
+}
+
+li {
+  line-height: 1.55;
+  margin-bottom: 3px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #808080;
+  margin: 20px 0;
+}
+
+a {
+  color: #0000ee;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #551a8b;
+}
+
+a:hover {
+  color: #cc0000;
+}
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+/* ============================================================
+   RESUME SECTION SPECIFICS
+   ============================================================ */
+#resume-content h1 {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+#resume-content h3 {
+  color: #000080;
+}
+
+/* Role line (bold + dates) */
+#resume-content p strong:first-child {
+  font-size: 15px;
+}
+
+/* ============================================================
+   AI EXPERIMENTS SECTION
+   ============================================================ */
+.experiments-header {
+  margin-bottom: 6px;
+}
+
+.experiments-intro {
+  font-style: italic;
+  color: #444444;
+  margin-bottom: 24px;
+  font-size: 15px;
+}
+
+.experiment-entry {
+  border-top: 1px solid #d4d0c8;
+  padding: 16px 0 12px;
+}
+
+.experiment-entry:last-child {
+  border-bottom: 1px solid #d4d0c8;
+}
+
+.experiment-meta {
+  font-family: "Arial", "Helvetica", sans-serif;
+  font-size: 12px;
+  color: #555555;
+  margin-bottom: 4px;
+}
+
+.experiment-title {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 11px;
+  font-weight: normal;
+  padding: 1px 5px;
+  border: 1px solid;
+}
+
+.status-badge.shipped {
+  background: #d4edda;
+  border-color: #28a745;
+  color: #155724;
+}
+
+.status-badge.ongoing {
+  background: #fff3cd;
+  border-color: #856404;
+  color: #856404;
+}
+
+.status-badge.abandoned {
+  background: #f8d7da;
+  border-color: #721c24;
+  color: #721c24;
+}
+
+.experiment-section-label {
+  font-family: "Arial", "Helvetica", sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #555555;
+  margin-top: 10px;
+  margin-bottom: 2px;
+}
+
+.experiment-body {
+  font-size: 15px;
+  line-height: 1.55;
+  margin-bottom: 4px;
+}
+
+/* placeholder state */
+.placeholder-entry {
+  border: 1px dashed #b0b0b0;
+  padding: 14px 16px;
+  color: #888888;
+  font-style: italic;
+  font-size: 14px;
+  margin: 12px 0;
+  background: #fafafa;
+}
+
+/* ============================================================
+   COLLAPSIBLE RESUME BULLETS
+   ============================================================ */
+#resume-content details {
+  margin: 6px 0 10px;
+}
+
+#resume-content details summary {
+  font-family: "Arial", "Helvetica", sans-serif;
+  font-size: 12px;
+  color: #000080;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  display: inline-block;
+  padding: 2px 6px;
+  border: 1px solid #000080;
+  background: #f0f0f8;
+}
+
+#resume-content details summary::-webkit-details-marker { display: none; }
+
+#resume-content details[open] summary {
+  background: #000080;
+  color: #ffffff;
+}
+
+#resume-content details ul {
+  margin-top: 6px;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  background: #d4d0c8;
+  border-top: 1px solid #808080;
+  font-family: "Arial", "Helvetica", sans-serif;
+  font-size: 12px;
+  padding: 6px 12px;
+  color: #000000;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.footer-contact {
+  font-size: 13px;
+}
+
+.footer-contact a {
+  color: #000080;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.footer-contact a:hover {
+  color: #cc0000;
+}
+
+.footer a {
+  color: #000080;
+}
+
+.footer a:visited {
+  color: #000080;
+}
+
+.footer-sep {
+  color: #808080;
+}
+
+/* ============================================================
+   PAINT TOGGLE IN MENU BAR
+   ============================================================ */
+.paint-toggle {
+  margin-left: auto;
+  cursor: pointer;
+  color: #000080;
+  font-weight: bold;
+}
+
+.paint-toggle:hover {
+  background: #000080;
+  color: #ffffff;
+}
+
+/* ============================================================
+   MS PAINT CANVAS OVERLAY
+   ============================================================ */
+#paintCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9000;
+  cursor: crosshair;
+  /* transparent by default — drawings appear on top of page */
+}
+
+#paintCanvas.hidden {
+  display: none;
+}
+
+/* ============================================================
+   MS PAINT TOOLBAR
+   ============================================================ */
+.paint-toolbar {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  z-index: 9001;
+  background: #d4d0c8;
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #404040;
+  border-bottom: 2px solid #404040;
+  box-shadow: 2px 2px 0 #000000;
+  width: 148px;
+  font-family: "Arial", "Helvetica", sans-serif;
+  font-size: 11px;
+}
+
+.paint-toolbar.hidden {
+  display: none;
+}
+
+.paint-toolbar-title {
+  background: linear-gradient(to right, #000080, #1084d0);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+.paint-close {
+  background: #d4d0c8;
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #404040;
+  border-bottom: 1px solid #404040;
+  width: 16px;
+  height: 14px;
+  font-size: 9px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  padding: 0;
+  line-height: 1;
+}
+
+.paint-section-label {
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #555;
+  padding: 5px 6px 2px;
+  letter-spacing: 0.04em;
+}
+
+.paint-palette {
+  display: grid;
+  grid-template-columns: repeat(5, 24px);
+  gap: 2px;
+  padding: 2px 6px 6px;
+}
+
+.paint-color {
+  width: 24px;
+  height: 20px;
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  cursor: pointer;
+}
+
+.paint-color.active {
+  border-top: 2px solid #000000;
+  border-left: 2px solid #000000;
+  border-right: 2px solid #808080;
+  border-bottom: 2px solid #808080;
+  outline: 1px solid #ffffff;
+}
+
+.paint-color:hover {
+  outline: 1px solid #000080;
+}
+
+.paint-sizes {
+  display: flex;
+  gap: 3px;
+  padding: 2px 6px 6px;
+  align-items: center;
+}
+
+.paint-size {
+  background: #d4d0c8;
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #404040;
+  border-bottom: 1px solid #404040;
+  width: 28px;
+  height: 24px;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.paint-size.active,
+.paint-size:active {
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  background: #c0c0c0;
+}
+
+.paint-tools {
+  display: flex;
+  gap: 3px;
+  padding: 2px 6px 6px;
+}
+
+.paint-tool {
+  background: #d4d0c8;
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #404040;
+  border-bottom: 1px solid #404040;
+  width: 34px;
+  height: 30px;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paint-tool.active,
+.paint-tool:active {
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  background: #c0c0c0;
+}
+
+.paint-clear {
+  display: block;
+  width: calc(100% - 12px);
+  margin: 0 6px 8px;
+  padding: 4px;
+  background: #d4d0c8;
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #404040;
+  border-bottom: 1px solid #404040;
+  font-family: "Arial", sans-serif;
+  font-size: 11px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.paint-clear:active {
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+}
+
+/* Status bar at very bottom */
+.status-bar {
+  background: #d4d0c8;
+  border-top: 2px solid #808080;
+  font-family: "Arial", sans-serif;
+  font-size: 11px;
+  padding: 2px 8px;
+  color: #000000;
+  display: flex;
+  gap: 1px;
+}
+
+.status-bar-cell {
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  padding: 1px 8px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 600px) {
+  body {
+    padding: 8px 4px 24px;
+    background-color: #008080;
+  }
+
+  .tab-content {
+    padding: 20px 18px 28px;
+  }
+
+  .title-bar-buttons {
+    display: none;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  .experiment-title {
+    font-size: 16px;
+  }
+}
