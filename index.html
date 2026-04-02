@@ -178,6 +178,54 @@
   <button class="paint-clear" id="paintClear">🗑 Clear</button>
 </div>
 
+<!-- =====================================================
+     CLIPPY CHATBOT
+     ===================================================== -->
+<div id="clippy-container">
+
+  <!-- Chat bubble window -->
+  <div id="clippy-bubble" class="hidden">
+    <div class="clippy-title-bar">
+      <span>📎 Clippy</span>
+      <button class="clippy-close" id="clippyClose">✕</button>
+    </div>
+    <div id="clippy-messages"></div>
+    <div id="clippy-input-row">
+      <input type="text" id="clippyInput" placeholder="Ask Clippy anything..." autocomplete="off" />
+      <button id="clippySend">Send</button>
+    </div>
+  </div>
+
+  <!-- Clippy avatar (SVG paperclip) -->
+  <div id="clippy-avatar" title="Hi! I'm Clippy. Click me!">
+    <svg width="54" height="80" viewBox="0 0 54 80" xmlns="http://www.w3.org/2000/svg">
+      <!-- Outer paperclip loop -->
+      <rect x="8" y="4" width="38" height="62" rx="19" ry="19"
+            fill="none" stroke="#b8860b" stroke-width="6"/>
+      <!-- Inner paperclip loop -->
+      <rect x="16" y="18" width="22" height="52" rx="11" ry="11"
+            fill="none" stroke="#b8860b" stroke-width="5"/>
+      <!-- Body fill (to look solid) -->
+      <rect x="11" y="20" width="32" height="44" rx="0"
+            fill="#f5f0dc"/>
+      <!-- Face area -->
+      <ellipse cx="27" cy="38" rx="13" ry="12" fill="#fdf8e8" stroke="#b8860b" stroke-width="1.5"/>
+      <!-- Eyes -->
+      <circle id="clippy-eye-l" cx="22" cy="36" r="2.5" fill="#1a1a1a"/>
+      <circle id="clippy-eye-r" cx="32" cy="36" r="2.5" fill="#1a1a1a"/>
+      <!-- Eye shine -->
+      <circle cx="23" cy="35" r="1" fill="#ffffff"/>
+      <circle cx="33" cy="35" r="1" fill="#ffffff"/>
+      <!-- Eyebrows -->
+      <path id="clippy-brow-l" d="M19 31 Q22 29 25 31" fill="none" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round"/>
+      <path id="clippy-brow-r" d="M29 31 Q32 29 35 31" fill="none" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round"/>
+      <!-- Mouth -->
+      <path id="clippy-mouth" d="M22 43 Q27 47 32 43" fill="none" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+</div>
+
 <!-- marked.js for rendering resume.md client-side -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
@@ -376,6 +424,110 @@
   canvas.addEventListener('touchend',   stopDraw);
 
   window.addEventListener('resize', resizeCanvas);
+</script>
+
+<script>
+  // ── Clippy chatbot ─────────────────────────────────────────────
+  const clippyBubble  = document.getElementById('clippy-bubble');
+  const clippyAvatar  = document.getElementById('clippy-avatar');
+  const clippyInput   = document.getElementById('clippyInput');
+  const clippyMsgs    = document.getElementById('clippy-messages');
+  const clippySend    = document.getElementById('clippySend');
+
+  let chatHistory = [];
+  let greeted = false;
+
+  function toggleClippy() {
+    const isHidden = clippyBubble.classList.contains('hidden');
+    clippyBubble.classList.toggle('hidden');
+    if (isHidden && !greeted) {
+      greeted = true;
+      setTimeout(() => addMessage('clippy', "It looks like you're viewing a portfolio! I'm Clippy — your helpful paperclip assistant. I was deprecated in 2007 but apparently still have a lot to offer. Would you like to know more about Niu's work?"), 400);
+    }
+  }
+
+  clippyAvatar.addEventListener('click', toggleClippy);
+  document.getElementById('clippyClose').addEventListener('click', () => {
+    clippyBubble.classList.add('hidden');
+  });
+
+  function addMessage(role, text) {
+    const div = document.createElement('div');
+    div.className = 'clippy-msg clippy-msg-' + role;
+    div.textContent = text;
+    clippyMsgs.appendChild(div);
+    clippyMsgs.scrollTop = clippyMsgs.scrollHeight;
+    return div;
+  }
+
+  function showTyping() {
+    const div = document.createElement('div');
+    div.className = 'clippy-msg clippy-msg-clippy clippy-typing';
+    div.id = 'clippy-typing';
+    div.textContent = '...';
+    clippyMsgs.appendChild(div);
+    clippyMsgs.scrollTop = clippyMsgs.scrollHeight;
+  }
+
+  function removeTyping() {
+    document.getElementById('clippy-typing')?.remove();
+  }
+
+  async function sendMessage() {
+    const text = clippyInput.value.trim();
+    if (!text) return;
+    clippyInput.value = '';
+    clippySend.disabled = true;
+
+    addMessage('user', text);
+    showTyping();
+
+    // Animate Clippy eyebrows while thinking
+    document.getElementById('clippy-brow-l').setAttribute('d', 'M19 29 Q22 27 25 29');
+    document.getElementById('clippy-brow-r').setAttribute('d', 'M29 29 Q32 27 35 29');
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history: chatHistory }),
+      });
+      const data = await res.json();
+      const reply = data.reply || '...';
+
+      chatHistory.push({ role: 'user', content: text });
+      chatHistory.push({ role: 'assistant', content: reply });
+      if (chatHistory.length > 12) chatHistory = chatHistory.slice(-12);
+
+      removeTyping();
+      addMessage('clippy', reply);
+    } catch {
+      removeTyping();
+      addMessage('clippy', "It looks like something went wrong! This reminds me of the time Internet Explorer crashed. Would you like to try again?");
+    }
+
+    // Reset eyebrows
+    document.getElementById('clippy-brow-l').setAttribute('d', 'M19 31 Q22 29 25 31');
+    document.getElementById('clippy-brow-r').setAttribute('d', 'M29 31 Q32 29 35 31');
+    clippySend.disabled = false;
+    clippyInput.focus();
+  }
+
+  clippySend.addEventListener('click', sendMessage);
+  clippyInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
+
+  // Idle eyebrow wiggle every 4s
+  setInterval(() => {
+    if (clippySend.disabled) return; // don't wiggle while thinking
+    const bl = document.getElementById('clippy-brow-l');
+    const br = document.getElementById('clippy-brow-r');
+    bl.setAttribute('d', 'M19 29 Q22 33 25 29');
+    br.setAttribute('d', 'M29 29 Q32 33 35 29');
+    setTimeout(() => {
+      bl.setAttribute('d', 'M19 31 Q22 29 25 31');
+      br.setAttribute('d', 'M29 31 Q32 29 35 31');
+    }, 300);
+  }, 4000);
 </script>
 
 </body>
