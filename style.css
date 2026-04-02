@@ -643,6 +643,98 @@ em {
 }
 
 /* ============================================================
+   HOME TAB
+   ============================================================ */
+.home-hero {
+  margin-bottom: 16px;
+}
+
+.home-hero h1 {
+  font-size: 30px;
+  margin-bottom: 4px;
+}
+
+.home-title {
+  font-family: "Arial", "Helvetica", sans-serif;
+  font-size: 13px;
+  color: #444444;
+  letter-spacing: 0.02em;
+}
+
+.home-about {
+  margin: 16px 0;
+}
+
+.home-about p {
+  font-size: 15px;
+  line-height: 1.65;
+  margin-bottom: 12px;
+}
+
+.home-info-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+  margin: 16px 0;
+}
+
+.home-info-table tr {
+  border-bottom: 1px solid #e8e4dc;
+}
+
+.home-info-table td {
+  padding: 7px 8px;
+  vertical-align: top;
+}
+
+.home-info-label {
+  font-family: "Arial", "Helvetica", sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #555555;
+  white-space: nowrap;
+  width: 110px;
+  padding-right: 16px;
+}
+
+.home-nav-hints {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.7;
+}
+
+/* ============================================================
+   PAINT TOOLBAR — desktop default visible, mobile hidden
+   ============================================================ */
+
+/* On mobile, start hidden */
+@media (max-width: 600px) {
+  .paint-toolbar {
+    display: none;
+  }
+
+  .paint-toolbar:not(.hidden) {
+    display: block;
+  }
+}
+
+/* ============================================================
+   CLIPPY — hidden by default, revealed by scroll
+   ============================================================ */
+#clippy-container.hidden {
+  display: none;
+}
+
+/* Sentinel at bottom of experiments tab */
+#clippy-sentinel {
+  height: 1px;
+  margin-top: 20px;
+}
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 @media (max-width: 600px) {
@@ -665,6 +757,10 @@ em {
 
   .experiment-title {
     font-size: 16px;
+  }
+
+  .home-info-label {
+    width: 80px;
   }
 }
 

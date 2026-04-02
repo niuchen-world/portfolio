@@ -28,19 +28,95 @@
     <span class="menu-item">File</span>
     <span class="menu-item">View</span>
     <span class="menu-item">Help</span>
-    <span class="menu-item paint-toggle" id="paintToggle" title="Open MS Paint">🖌️ Paint</span>
+    <span class="menu-item paint-toggle" id="paintToggle" title="Toggle Paint toolbar">🖌️ Paint</span>
   </div>
 
   <!-- Tab Bar -->
   <div class="tab-bar">
-    <button class="tab active" data-tab="experiments">AI Experiments</button>
+    <button class="tab active" data-tab="home">Home</button>
     <button class="tab" data-tab="resume">Resume</button>
+    <button class="tab" data-tab="experiments">AI Experiments</button>
+  </div>
+
+  <!-- =====================================================
+       TAB: HOME (landing)
+       ===================================================== -->
+  <div class="tab-content" id="tab-home">
+
+    <div class="home-hero">
+      <h1>Niu Chen</h1>
+      <p class="home-title">Insights Program Manager · Research Infrastructure &amp; AI</p>
+    </div>
+
+    <hr />
+
+    <div class="home-about">
+      <p>
+        I build the infrastructure, workflows, and governance that let organizations move faster with AI —
+        not just research teams, but entire product orgs. Currently at
+        <a href="https://block.xyz" target="_blank" rel="noopener">Block Inc.</a>,
+        where I've scaled research ops from 0→1, deployed AI enablement programs,
+        and built the systems that 80+ cross-functional partners depend on daily.
+      </p>
+      <p>
+        I'm interested in what comes next: AI operations at the org or product level —
+        the infrastructure layer between "we have AI tools" and "AI actually changes how we work."
+      </p>
+    </div>
+
+    <hr />
+
+    <table class="home-info-table">
+      <tr>
+        <td class="home-info-label">Currently</td>
+        <td><a href="https://block.xyz" target="_blank" rel="noopener">Block Inc.</a> — Program Manager, Research Automation Ops</td>
+      </tr>
+      <tr>
+        <td class="home-info-label">Education</td>
+        <td>MS Information Science, Cornell · BA CS &amp; Economics, UBC</td>
+      </tr>
+      <tr>
+        <td class="home-info-label">Building</td>
+        <td>AI ops tooling, governance frameworks, enablement programs</td>
+      </tr>
+      <tr>
+        <td class="home-info-label">Interested in</td>
+        <td>AI operations roles at the product or org level</td>
+      </tr>
+      <tr>
+        <td class="home-info-label">Location</td>
+        <td>New York, NY</td>
+      </tr>
+      <tr>
+        <td class="home-info-label">Contact</td>
+        <td><a href="https://linkedin.com/in/niuchen" target="_blank" rel="noopener">linkedin.com/in/niuchen ↗</a></td>
+      </tr>
+    </table>
+
+    <hr />
+
+    <div class="home-nav-hints">
+      <p>
+        <strong>Resume →</strong> Full work history with linked companies.<br />
+        <strong>AI Experiments →</strong> A running log of things I've built and learned.
+      </p>
+    </div>
+
+  </div><!-- /tab-home -->
+
+  <!-- =====================================================
+       TAB: RESUME (rendered from resume.md)
+       ===================================================== -->
+  <div class="tab-content hidden" id="tab-resume">
+    <div id="resume-content">
+      <p style="color:#888; font-style:italic;">Loading resume…</p>
+    </div>
   </div>
 
   <!-- =====================================================
        TAB: AI EXPERIMENTS
        ===================================================== -->
-  <div class="tab-content" id="tab-experiments">
+  <div class="tab-content hidden" id="tab-experiments">
 
     <h1 class="experiments-header">AI Experiments</h1>
     <p class="experiments-intro">
@@ -107,16 +183,10 @@
       </div>
     </div>
 
-  </div><!-- /tab-experiments -->
+    <!-- Sentinel: Clippy reveals when this is visible -->
+    <div id="clippy-sentinel"></div>
 
-  <!-- =====================================================
-       TAB: RESUME (rendered from resume.md)
-       ===================================================== -->
-  <div class="tab-content hidden" id="tab-resume">
-    <div id="resume-content">
-      <p style="color:#888; font-style:italic;">Loading resume…</p>
-    </div>
-  </div>
+  </div><!-- /tab-experiments -->
 
   <!-- Footer -->
   <div class="footer">
@@ -141,7 +211,8 @@
      ===================================================== -->
 <canvas id="paintCanvas" class="hidden"></canvas>
 
-<div id="paintToolbar" class="paint-toolbar hidden">
+<!-- Paint toolbar: no hidden class — CSS hides it on mobile -->
+<div id="paintToolbar" class="paint-toolbar">
   <div class="paint-toolbar-title">
     <span>🖌️ Paint</span>
     <button class="paint-close" id="paintClose">✕</button>
@@ -171,7 +242,8 @@
 
   <div class="paint-section-label">Tools</div>
   <div class="paint-tools">
-    <button class="paint-tool active" id="toolPencil" title="Pencil">✏️</button>
+    <button class="paint-tool" id="toolMouse" title="Interact (browse page)">🖱️</button>
+    <button class="paint-tool active" id="toolPencil" title="Pencil (draw)">✏️</button>
     <button class="paint-tool" id="toolEraser" title="Eraser">🧹</button>
   </div>
 
@@ -179,9 +251,9 @@
 </div>
 
 <!-- =====================================================
-     CLIPPY CHATBOT
+     CLIPPY CHATBOT (hidden until scroll sentinel)
      ===================================================== -->
-<div id="clippy-container">
+<div id="clippy-container" class="hidden">
 
   <!-- Chat bubble window -->
   <div id="clippy-bubble" class="hidden">
@@ -199,27 +271,18 @@
   <!-- Clippy avatar (SVG paperclip) -->
   <div id="clippy-avatar" title="Hi! I'm Clippy. Click me!">
     <svg width="54" height="80" viewBox="0 0 54 80" xmlns="http://www.w3.org/2000/svg">
-      <!-- Outer paperclip loop -->
       <rect x="8" y="4" width="38" height="62" rx="19" ry="19"
             fill="none" stroke="#b8860b" stroke-width="6"/>
-      <!-- Inner paperclip loop -->
       <rect x="16" y="18" width="22" height="52" rx="11" ry="11"
             fill="none" stroke="#b8860b" stroke-width="5"/>
-      <!-- Body fill (to look solid) -->
-      <rect x="11" y="20" width="32" height="44" rx="0"
-            fill="#f5f0dc"/>
-      <!-- Face area -->
+      <rect x="11" y="20" width="32" height="44" rx="0" fill="#f5f0dc"/>
       <ellipse cx="27" cy="38" rx="13" ry="12" fill="#fdf8e8" stroke="#b8860b" stroke-width="1.5"/>
-      <!-- Eyes -->
-      <circle id="clippy-eye-l" cx="22" cy="36" r="2.5" fill="#1a1a1a"/>
-      <circle id="clippy-eye-r" cx="32" cy="36" r="2.5" fill="#1a1a1a"/>
-      <!-- Eye shine -->
+      <circle cx="22" cy="36" r="2.5" fill="#1a1a1a"/>
+      <circle cx="32" cy="36" r="2.5" fill="#1a1a1a"/>
       <circle cx="23" cy="35" r="1" fill="#ffffff"/>
       <circle cx="33" cy="35" r="1" fill="#ffffff"/>
-      <!-- Eyebrows -->
       <path id="clippy-brow-l" d="M19 31 Q22 29 25 31" fill="none" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round"/>
       <path id="clippy-brow-r" d="M29 31 Q32 29 35 31" fill="none" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round"/>
-      <!-- Mouth -->
       <path id="clippy-mouth" d="M22 43 Q27 47 32 43" fill="none" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round"/>
     </svg>
   </div>
@@ -230,7 +293,7 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
   // ── Tab switching ──────────────────────────────────────────────
-  const tabs = document.querySelectorAll('.tab');
+  const tabs   = document.querySelectorAll('.tab');
   const panels = document.querySelectorAll('.tab-content');
 
   tabs.forEach(tab => {
@@ -247,7 +310,6 @@
   let resumeLoaded = false;
 
   function makeCollapsible(container) {
-    // For each <ul> that directly follows role/company content, wrap in <details>
     container.querySelectorAll('ul').forEach(ul => {
       const details = document.createElement('details');
       const summary = document.createElement('summary');
@@ -262,10 +324,7 @@
   function loadResume() {
     if (resumeLoaded) return;
     fetch('resume.md')
-      .then(r => {
-        if (!r.ok) throw new Error('Could not load resume.md');
-        return r.text();
-      })
+      .then(r => { if (!r.ok) throw new Error(); return r.text(); })
       .then(md => {
         const el = document.getElementById('resume-content');
         el.innerHTML = marked.parse(md);
@@ -274,55 +333,95 @@
       })
       .catch(() => {
         document.getElementById('resume-content').innerHTML =
-          '<p style="color:#cc0000;">⚠ Could not load resume.md. ' +
-          'Run: <code>python3 -m http.server 8080</code></p>';
+          '<p style="color:#cc0000;">⚠ Could not load resume.md. Run: <code>python3 -m http.server 8080</code></p>';
       });
   }
 
   // ── MS Paint ──────────────────────────────────────────────────
-  const canvas   = document.getElementById('paintCanvas');
-  const toolbar  = document.getElementById('paintToolbar');
-  const ctx      = canvas.getContext('2d');
+  const canvas  = document.getElementById('paintCanvas');
+  const toolbar = document.getElementById('paintToolbar');
+  const ctx     = canvas.getContext('2d');
 
   let painting   = false;
   let paintColor = '#000000';
   let brushSize  = 2;
   let isEraser   = false;
-  let lastX      = 0;
-  let lastY      = 0;
+  let drawMode   = false; // start in interact mode
+  let lastX = 0, lastY = 0;
 
   function resizeCanvas() {
-    // Preserve drawing when resizing
     const tmp = document.createElement('canvas');
-    tmp.width  = canvas.width;
-    tmp.height = canvas.height;
+    tmp.width = canvas.width; tmp.height = canvas.height;
     tmp.getContext('2d').drawImage(canvas, 0, 0);
-    canvas.width  = window.innerWidth;
+    canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     ctx.drawImage(tmp, 0, 0);
   }
 
-  function openPaint() {
-    resizeCanvas();
-    canvas.classList.remove('hidden');
+  function setDrawMode(on) {
+    drawMode = on;
+    if (on) {
+      resizeCanvas();
+      canvas.classList.remove('hidden');
+      canvas.style.cursor = 'crosshair';
+      document.getElementById('toolPencil').classList.add('active');
+      document.getElementById('toolMouse').classList.remove('active');
+      document.getElementById('toolEraser').classList.remove('active');
+    } else {
+      canvas.classList.add('hidden');
+      document.getElementById('toolMouse').classList.add('active');
+      document.getElementById('toolPencil').classList.remove('active');
+      document.getElementById('toolEraser').classList.remove('active');
+      isEraser = false;
+    }
+  }
+
+  function showToolbar() {
     toolbar.classList.remove('hidden');
-    canvas.style.cursor = 'crosshair';
+    toolbar.classList.remove('paint-toolbar-mobile-hidden');
   }
 
-  function closePaint() {
-    canvas.classList.add('hidden');
-    toolbar.classList.add('hidden');
+  function hideToolbar() {
+    if (window.innerWidth <= 600) {
+      toolbar.classList.add('hidden');
+    } else {
+      toolbar.classList.add('hidden');
+    }
+    setDrawMode(false);
   }
 
+  // Paint toggle in menu bar
   document.getElementById('paintToggle').addEventListener('click', () => {
-    if (canvas.classList.contains('hidden')) openPaint();
-    else closePaint();
+    if (toolbar.classList.contains('hidden')) {
+      showToolbar();
+    } else {
+      hideToolbar();
+    }
   });
 
-  document.getElementById('paintClose').addEventListener('click', closePaint);
+  document.getElementById('paintClose').addEventListener('click', hideToolbar);
 
   document.getElementById('paintClear').addEventListener('click', () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+  });
+
+  // Mouse tool (interact mode)
+  document.getElementById('toolMouse').addEventListener('click', () => {
+    setDrawMode(false);
+  });
+
+  // Pencil tool
+  document.getElementById('toolPencil').addEventListener('click', () => {
+    isEraser = false;
+    setDrawMode(true);
+  });
+
+  // Eraser tool
+  document.getElementById('toolEraser').addEventListener('click', () => {
+    isEraser = true;
+    setDrawMode(true);
+    document.getElementById('toolEraser').classList.add('active');
+    document.getElementById('toolPencil').classList.remove('active');
   });
 
   // Color swatches
@@ -332,8 +431,7 @@
       swatch.classList.add('active');
       paintColor = swatch.dataset.color;
       isEraser = false;
-      document.getElementById('toolPencil').classList.add('active');
-      document.getElementById('toolEraser').classList.remove('active');
+      setDrawMode(true);
     });
   });
 
@@ -346,60 +444,43 @@
     });
   });
 
-  // Tools
-  document.getElementById('toolPencil').addEventListener('click', () => {
-    isEraser = false;
-    document.getElementById('toolPencil').classList.add('active');
-    document.getElementById('toolEraser').classList.remove('active');
-  });
-
-  document.getElementById('toolEraser').addEventListener('click', () => {
-    isEraser = true;
-    document.getElementById('toolEraser').classList.add('active');
-    document.getElementById('toolPencil').classList.remove('active');
-  });
-
   // Drawing
   function getPos(e) {
-    if (e.touches) {
-      return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    }
-    return { x: e.clientX, y: e.clientY };
+    return e.touches
+      ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
+      : { x: e.clientX, y: e.clientY };
   }
 
   function startDraw(e) {
-    // Don't draw if clicking on the toolbar
+    if (!drawMode) return;
     if (toolbar.contains(e.target)) return;
     painting = true;
     const pos = getPos(e);
-    lastX = pos.x;
-    lastY = pos.y;
-    // Draw a dot on click
+    lastX = pos.x; lastY = pos.y;
     ctx.beginPath();
     ctx.arc(lastX, lastY, brushSize / 2, 0, Math.PI * 2);
-    ctx.fillStyle = isEraser ? 'rgba(0,0,0,1)' : paintColor;
     if (isEraser) {
       ctx.globalCompositeOperation = 'destination-out';
-      ctx.fill();
-      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = 'rgba(0,0,0,1)';
     } else {
-      ctx.fill();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = paintColor;
     }
+    ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
   }
 
   function draw(e) {
-    if (!painting) return;
+    if (!painting || !drawMode) return;
     if (toolbar.contains(e.target)) return;
     e.preventDefault();
     const pos = getPos(e);
-
     ctx.beginPath();
     ctx.moveTo(lastX, lastY);
     ctx.lineTo(pos.x, pos.y);
     ctx.lineWidth = brushSize;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-
     if (isEraser) {
       ctx.globalCompositeOperation = 'destination-out';
       ctx.strokeStyle = 'rgba(0,0,0,1)';
@@ -407,10 +488,9 @@
       ctx.globalCompositeOperation = 'source-over';
       ctx.strokeStyle = paintColor;
     }
-
     ctx.stroke();
-    lastX = pos.x;
-    lastY = pos.y;
+    ctx.globalCompositeOperation = 'source-over';
+    lastX = pos.x; lastY = pos.y;
   }
 
   function stopDraw() { painting = false; }
@@ -422,17 +502,36 @@
   canvas.addEventListener('touchstart', startDraw, { passive: false });
   canvas.addEventListener('touchmove',  draw,      { passive: false });
   canvas.addEventListener('touchend',   stopDraw);
+  window.addEventListener('resize', () => { if (drawMode) resizeCanvas(); });
 
-  window.addEventListener('resize', resizeCanvas);
-</script>
+  // ── Clippy: reveal on scroll to bottom of AI Experiments ──────
+  const clippyContainer = document.getElementById('clippy-container');
+  const sentinel = document.getElementById('clippy-sentinel');
 
-<script>
+  const clippyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        clippyContainer.classList.remove('hidden');
+        clippyObserver.disconnect(); // only reveal once
+      }
+    });
+  }, { threshold: 0.5 });
+
+  // Only observe when on experiments tab
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      if (tab.dataset.tab === 'experiments') {
+        setTimeout(() => clippyObserver.observe(sentinel), 100);
+      }
+    });
+  });
+
   // ── Clippy chatbot ─────────────────────────────────────────────
-  const clippyBubble  = document.getElementById('clippy-bubble');
-  const clippyAvatar  = document.getElementById('clippy-avatar');
-  const clippyInput   = document.getElementById('clippyInput');
-  const clippyMsgs    = document.getElementById('clippy-messages');
-  const clippySend    = document.getElementById('clippySend');
+  const clippyBubble = document.getElementById('clippy-bubble');
+  const clippyAvatar = document.getElementById('clippy-avatar');
+  const clippyInput  = document.getElementById('clippyInput');
+  const clippyMsgs   = document.getElementById('clippy-messages');
+  const clippySend   = document.getElementById('clippySend');
 
   let chatHistory = [];
   let greeted = false;
@@ -442,7 +541,7 @@
     clippyBubble.classList.toggle('hidden');
     if (isHidden && !greeted) {
       greeted = true;
-      setTimeout(() => addMessage('clippy', "It looks like you're viewing a portfolio! I'm Clippy — your helpful paperclip assistant. I was deprecated in 2007 but apparently still have a lot to offer. Would you like to know more about Niu's work?"), 400);
+      setTimeout(() => addMessage('clippy', "It looks like you've reached the bottom! I'm Clippy — your helpful paperclip assistant. I was deprecated in 2007 but apparently still have a lot to offer. Would you like to know more about Niu's work?"), 400);
     }
   }
 
@@ -457,7 +556,6 @@
     div.textContent = text;
     clippyMsgs.appendChild(div);
     clippyMsgs.scrollTop = clippyMsgs.scrollHeight;
-    return div;
   }
 
   function showTyping() {
@@ -469,23 +567,17 @@
     clippyMsgs.scrollTop = clippyMsgs.scrollHeight;
   }
 
-  function removeTyping() {
-    document.getElementById('clippy-typing')?.remove();
-  }
+  function removeTyping() { document.getElementById('clippy-typing')?.remove(); }
 
   async function sendMessage() {
     const text = clippyInput.value.trim();
     if (!text) return;
     clippyInput.value = '';
     clippySend.disabled = true;
-
     addMessage('user', text);
     showTyping();
-
-    // Animate Clippy eyebrows while thinking
     document.getElementById('clippy-brow-l').setAttribute('d', 'M19 29 Q22 27 25 29');
     document.getElementById('clippy-brow-r').setAttribute('d', 'M29 29 Q32 27 35 29');
-
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -494,19 +586,15 @@
       });
       const data = await res.json();
       const reply = data.reply || '...';
-
       chatHistory.push({ role: 'user', content: text });
       chatHistory.push({ role: 'assistant', content: reply });
       if (chatHistory.length > 12) chatHistory = chatHistory.slice(-12);
-
       removeTyping();
       addMessage('clippy', reply);
     } catch {
       removeTyping();
       addMessage('clippy', "It looks like something went wrong! This reminds me of the time Internet Explorer crashed. Would you like to try again?");
     }
-
-    // Reset eyebrows
     document.getElementById('clippy-brow-l').setAttribute('d', 'M19 31 Q22 29 25 31');
     document.getElementById('clippy-brow-r').setAttribute('d', 'M29 31 Q32 29 35 31');
     clippySend.disabled = false;
@@ -516,9 +604,8 @@
   clippySend.addEventListener('click', sendMessage);
   clippyInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
 
-  // Idle eyebrow wiggle every 4s
   setInterval(() => {
-    if (clippySend.disabled) return; // don't wiggle while thinking
+    if (clippySend.disabled) return;
     const bl = document.getElementById('clippy-brow-l');
     const br = document.getElementById('clippy-brow-r');
     bl.setAttribute('d', 'M19 29 Q22 33 25 29');
