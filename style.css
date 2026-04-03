@@ -590,6 +590,14 @@ em {
   justify-content: center;
 }
 
+.paint-tool img {
+  width: 20px;
+  height: 20px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  display: block;
+}
+
 .paint-tool.active,
 .paint-tool:active {
   border-top: 1px solid #404040;
