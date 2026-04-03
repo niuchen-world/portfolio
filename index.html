@@ -15,7 +15,7 @@
   <!-- Title Bar -->
   <div class="title-bar">
     <span class="title-bar-icon">📄</span>
-    <span>Niu Chen — Portfolio</span>
+    <span>/users/niuchen/claude-dev/website</span>
     <div class="title-bar-buttons">
       <div class="title-bar-btn">_</div>
       <div class="title-bar-btn">□</div>
@@ -45,50 +45,44 @@
 
     <div class="home-hero">
       <h1>Niu Chen</h1>
-      <p class="home-title">Insights Program Manager · Research Infrastructure &amp; AI</p>
+      <p class="home-title">Builder · Synthesist · Orchestrator </p>
     </div>
 
     <hr />
 
-    <div class="home-about">
+    <!-- <div class="home-about">
       <p>
-        I build the infrastructure, workflows, and governance that let organizations move faster with AI —
-        not just research teams, but entire product orgs. Currently at
-        <a href="https://block.xyz" target="_blank" rel="noopener">Block Inc.</a>,
-        where I've scaled research ops from 0→1, deployed AI enablement programs,
-        and built the systems that 80+ cross-functional partners depend on daily.
+        I build the programs, workflows, and guardrails that let teams move faster with AI —
+        enabling AI adoption across the company. 
       </p>
-      <p>
-        I'm interested in what comes next: AI operations at the org or product level —
-        the infrastructure layer between "we have AI tools" and "AI actually changes how we work."
-      </p>
-    </div>
+    
+    </div> -->
 
-    <hr />
+    <!-- <hr /> -->
 
     <table class="home-info-table">
       <tr>
-        <td class="home-info-label">Currently</td>
-        <td><a href="https://block.xyz" target="_blank" rel="noopener">Block Inc.</a> — Program Manager, Research Automation Ops</td>
-      </tr>
-      <tr>
-        <td class="home-info-label">Education</td>
-        <td>MS Information Science, Cornell · BA CS &amp; Economics, UBC</td>
+        <td class="home-info-label">Recently</td>
+        <td>Block (Cash App & Square) — Program Manager, Research AI Operations</td>
       </tr>
       <tr>
         <td class="home-info-label">Building</td>
-        <td>AI ops tooling, governance frameworks, enablement programs</td>
+        <td>AI ops tooling, workflows, magical experiences, energetic connections </td>
       </tr>
       <tr>
         <td class="home-info-label">Interested in</td>
-        <td>AI operations roles at the product or org level</td>
+        <td>Growing and scaling AI capabilities across orgs</td>
       </tr>
       <tr>
         <td class="home-info-label">Location</td>
-        <td>New York, NY</td>
+        <td>Brooklyn, NY</td>
       </tr>
       <tr>
-        <td class="home-info-label">Contact</td>
+        <td class="home-info-label">Education</td>
+        <td>M.Sc. Information Science, Cornell · B.A. CS &amp; Economics, UBC</td>
+      </tr>
+      <tr>
+        <td class="home-info-label">Get in Touch</td>
         <td><a href="https://linkedin.com/in/niuchen" target="_blank" rel="noopener">linkedin.com/in/niuchen ↗</a></td>
       </tr>
     </table>
@@ -97,8 +91,8 @@
 
     <div class="home-nav-hints">
       <p>
-        <strong>Resume →</strong> Full work history with linked companies.<br />
-        <strong>AI Experiments →</strong> A running log of things I've built and learned.
+        <strong><a class="home-nav-link" data-tab="resume">Resume</a></strong> → Full work history with linked companies.<br />
+        <strong><a class="home-nav-link" data-tab="experiments">AI Experiments</a></strong> → A running log of things I've built and learned.
       </p>
     </div>
 
@@ -296,14 +290,21 @@
   const tabs   = document.querySelectorAll('.tab');
   const panels = document.querySelectorAll('.tab-content');
 
+  function switchTab(tabName) {
+    tabs.forEach(t => t.classList.remove('active'));
+    panels.forEach(p => p.classList.add('hidden'));
+    const target = document.querySelector(`.tab[data-tab="${tabName}"]`);
+    if (target) target.classList.add('active');
+    document.getElementById('tab-' + tabName).classList.remove('hidden');
+    if (tabName === 'resume') loadResume();
+  }
+
   tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      panels.forEach(p => p.classList.add('hidden'));
-      tab.classList.add('active');
-      document.getElementById('tab-' + tab.dataset.tab).classList.remove('hidden');
-      if (tab.dataset.tab === 'resume') loadResume();
-    });
+    tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+  });
+
+  document.querySelectorAll('.home-nav-link').forEach(link => {
+    link.addEventListener('click', () => switchTab(link.dataset.tab));
   });
 
   // ── Resume loader + collapsible bullets ───────────────────────

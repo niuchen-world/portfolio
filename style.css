@@ -714,6 +714,17 @@ em {
   line-height: 1.7;
 }
 
+.home-nav-link {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.home-nav-link:hover {
+  color: #000080;
+}
+
 /* ============================================================
    PAINT TOOLBAR — desktop default visible, mobile hidden
    ============================================================ */
